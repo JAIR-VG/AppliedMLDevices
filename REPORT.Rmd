@@ -1,6 +1,8 @@
 ---
-title: "Course Project For Predicting Personal Activity "
-output: html_document
+title: 'Course Project For Predicting Personal Activity '
+output:
+  html_document: default
+  pdf_document: default
 date: '2022-04-10'
 ---
 
@@ -92,3 +94,5 @@ Now we use the test set with the Random Forest trained previously
 predicttst<-predict(modelRF,testing)
 predicttst
 ```
+
+This report can be found in https://rpubs.com/vgarciaj/889816
