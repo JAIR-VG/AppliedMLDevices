@@ -244,3 +244,11 @@ Detection Rate         0.2844   0.1935   0.1744   0.1639   0.1838
 Detection Prevalence   0.2844   0.1935   0.1744   0.1639   0.1838
 
 Balanced Accuracy      1.0000   1.0000   1.0000   1.0000   1.0000
+
+Now we use the test set with the Random Forest trained previously
+
+predicttst<-predict(modelRF,testing)
+predicttst
+
+ [1] B A B A A E D B A A B C B A E E A B B B
+Levels: A B C D E
