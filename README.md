@@ -83,4 +83,90 @@ training[training == "#DIV/0!"] <- NA
 
 which(colSums(is.na(training))>0)
 
+max_roll_belt           max_picth_belt            min_roll_belt 
 
+11                       12                       13 
+
+min_pitch_belt      amplitude_roll_belt     amplitude_pitch_belt 
+
+14                       15                       16 
+
+var_total_accel_belt            avg_roll_belt         stddev_roll_belt 
+
+17                       18                       19 
+
+var_roll_belt           avg_pitch_belt        stddev_pitch_belt 
+
+20                       21                       22 
+
+var_pitch_belt             avg_yaw_belt          stddev_yaw_belt 
+
+23                       24                       25 
+
+var_yaw_belt            var_accel_arm            max_picth_arm 
+
+26                       40                       50 
+
+max_yaw_arm              min_yaw_arm        amplitude_yaw_arm 
+
+51                       52                       53 
+
+max_roll_dumbbell       max_picth_dumbbell        min_roll_dumbbell 
+
+57                       58                       59 
+
+min_pitch_dumbbell  amplitude_roll_dumbbell amplitude_pitch_dumbbell 
+
+60                       61                       62 
+
+var_accel_dumbbell        avg_roll_dumbbell     stddev_roll_dumbbell 
+
+64                       65                       66 
+
+var_roll_dumbbell       avg_pitch_dumbbell    stddev_pitch_dumbbell 
+
+67                       68                       69 
+
+var_pitch_dumbbell         avg_yaw_dumbbell      stddev_yaw_dumbbell 
+
+70                       71                       72 
+
+var_yaw_dumbbell        max_picth_forearm        min_pitch_forearm 
+
+73                       86                       87 
+
+amplitude_pitch_forearm        var_accel_forearm 
+
+88                       90
+
+The columns with NA values can be dealt with imputation. However, there are several strategies. Therefore, the columns are removed. Besides, X, user_name and time columns also are removed.Other preprocessing steps are performed, converting string to factors.
+
+training <- training[,colSums(is.na(training))==0]
+
+testing <- testing[,colSums(is.na(testing))==0]
+
+training$X <- NULL
+
+training$user_name <- NULL
+
+training$raw_timestamp_part_1<-NULL
+
+training$raw_timestamp_part_2<-NULL
+
+training$cvtd_timestamp<-NULL
+
+training$num_window<-NULL
+
+testing$X <- NULL
+
+testing$user_name <- NULL
+
+testing$raw_timestamp_part_1<-NULL
+
+testing$raw_timestamp_part_2<-NULL
+
+testing$cvtd_timestamp<-NULL
+
+testing$num_window<-NULL
+
+training<-as.data.frame(unclass(training),stringsAsFactors = TRUE)
