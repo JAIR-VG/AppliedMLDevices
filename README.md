@@ -170,3 +170,77 @@ testing$cvtd_timestamp<-NULL
 testing$num_window<-NULL
 
 training<-as.data.frame(unclass(training),stringsAsFactors = TRUE)
+
+# Experimental Setup and Results
+
+For the experiments, we use an random forest classifier. The training process is performed using a ten fold cross-validation with 50 trees.
+
+fitControl<-trainControl(method="cv", number = 10, allowParallel=TRUE)
+
+We train the classifier
+
+modelRF<-train(classe ~ ., data=training, method="rf", trControl=fitControl, ntree=50)
+
+We compute the accuracy using the training set
+
+predicttra<-predict(modelRF,training)
+
+confusionMatrix(predicttra,training$classe)
+
+ Confusion Matrix and Statistics
+
+
+
+Reference
+
+Prediction    A    B    C    D    E
+
+A 5580    0    0    0    0
+
+B    0 3797    0    0    0
+
+C    0    0 3422    0    0
+
+D    0    0    0 3216    0
+
+E    0    0    0    0 3607
+
+
+
+Overall Statistics
+
+
+
+Accuracy : 1          
+
+95% CI : (0.9998, 1)
+
+No Information Rate : 0.2844     
+
+P-Value [Acc > NIR] : < 2.2e-16  
+
+
+
+Kappa : 1          
+
+Mcnemar's Test P-Value : NA         
+
+Statistics by Class:
+
+Class: A Class: B Class: C Class: D Class: E
+
+Sensitivity            1.0000   1.0000   1.0000   1.0000   1.0000
+
+Specificity            1.0000   1.0000   1.0000   1.0000   1.0000
+
+Pos Pred Value         1.0000   1.0000   1.0000   1.0000   1.0000
+
+Neg Pred Value         1.0000   1.0000   1.0000   1.0000   1.0000
+
+Prevalence             0.2844   0.1935   0.1744   0.1639   0.1838
+
+Detection Rate         0.2844   0.1935   0.1744   0.1639   0.1838
+
+Detection Prevalence   0.2844   0.1935   0.1744   0.1639   0.1838
+
+Balanced Accuracy      1.0000   1.0000   1.0000   1.0000   1.0000
