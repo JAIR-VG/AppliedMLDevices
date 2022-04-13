@@ -24,12 +24,71 @@ https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv
 
 Both can be get using the R-command download.file()
 
-## Including Plots
+Now, we load both datasets
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r load, echo=TRUE}
+training<-read.csv("pml-training.csv", header=TRUE, stringsAsFactors = FALSE)
+testing <-read.csv("pml-testing.csv", header=TRUE, stringsAsFactors = FALSE)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+We show the internal structure of the training set
+```{r internalstruc, echo=TRUE}
+str(training)
+```
+The first preprocessing step, in the training and testing dataset is to remove all the variables that are zero variance predictors. Also, as can been observed there are several NA, DIV0 and blank values. The empty values and DIV0 can be seemed as NA, therefore, we set both values to NA. Besides, we compute the columns with NA values.
+
+```{r setNA, echo=TRUE}
+library(caret)
+idxnzv <-nearZeroVar(training)
+training<-training[,-idxnzv]
+testing <-testing[,-idxnzv]
+training[training == ""] <- NA
+training[training == "#DIV/0!"] <- NA
+which(colSums(is.na(training))>0)
+```
+The columns with NA values can be dealt with imputation. However, there are several strategies. Therefore, the columns are removed. Besides, X, user_name and time columns also are removed.Other preprocessing steps are performed, converting string to factors.
+
+```{r removeNA, echo=TRUE}
+training <- training[,colSums(is.na(training))==0]
+testing <- testing[,colSums(is.na(testing))==0]
+training$X <- NULL
+training$user_name <- NULL
+training$raw_timestamp_part_1<-NULL
+training$raw_timestamp_part_2<-NULL
+training$cvtd_timestamp<-NULL
+training$num_window<-NULL
+testing$X <- NULL
+testing$user_name <- NULL
+testing$raw_timestamp_part_1<-NULL
+testing$raw_timestamp_part_2<-NULL
+testing$cvtd_timestamp<-NULL
+testing$num_window<-NULL
+training<-as.data.frame(unclass(training),stringsAsFactors = TRUE)
+```
+
+## Experimental Setup and Results
+
+For the experiments, we use an random forest classifier. The training process is performed using a ten fold cross-validation with 50 trees.
+
+```{r expersetup, echo=TRUE}
+fitControl<-trainControl(method="cv", number = 10, allowParallel=TRUE)
+```
+
+We train the classifier
+```{r entrenamiento, echo=TRUE}
+modelRF<-train(classe ~ ., data=training, method="rf", trControl=fitControl, ntree=50)
+```
+
+We compute the accuracy using the training set
+
+```{r errortra, echo=TRUE}
+predicttra<-predict(modelRF,training)
+confusionMatrix(predicttra,training$classe)
+```
+
+Now we use the test set with the Random Forest trained previously
+
+```{r predtst, echo=TRUE}
+predicttst<-predict(modelRF,testing)
+predicttst
+```
